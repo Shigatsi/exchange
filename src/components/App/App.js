@@ -1,61 +1,85 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 
-import {getLatest} from '../../utils/Api'
+import { getLatest } from "../../utils/Api";
+import { availebleCurrensies } from "../../utils/const";
 
 function App() {
-  const [currensies, setCurrensies] = React.useState({})
-  const [baseCurrensy, setBaseCurrensy]= React.useState('EUR');
-  const [availebleCurrensies, setAvailebleCurrensies] = React.useState([]);
-  const [convertedCurrensy, setConvertedCurrensy] = React.useState('RUB');
+  const [baseCurrensy, setBaseCurrensy] = React.useState("EUR");
+  const [convertedCurrensy, setConvertedCurrensy] = React.useState("RUB");
   const [convertedCurrensyVal, setConvertedCurrensyVal] = React.useState(null);
-
-
-
+  const [baseCurrensyVal, setBaseCurrensyVal] = React.useState("1");
 
   React.useEffect(() => {
-    getLatest(baseCurrensy).then((res) => {
-      setCurrensies(res)
-      setAvailebleCurrensies(Object.keys(res.data));
-      console.log(Object.keys(res.data))
-      console.log("latest", res['data']);
-      return res
-    })
-    .then((res)=>{
-      setConvertedCurrensyVal(res.data[convertedCurrensy])
-    })
-  },[baseCurrensy, convertedCurrensy]);
-
-  console.log('baseCurrensy: ', baseCurrensy)
-  console.log('currensies: ', currensies)
+    getLatest(baseCurrensy)
+      .then((currensies) => {
+        return currensies;
+      })
+      .then((currensies) => {
+        setConvertedCurrensyVal(currensies.data[convertedCurrensy]);
+      });
+  }, [baseCurrensy, convertedCurrensy]);
 
   const selectorHandler = (id, setCurrensy) => {
     const selectBox = document.getElementById(id);
-    setCurrensy(selectBox.options[selectBox.selectedIndex].value)
+    setCurrensy(selectBox.options[selectBox.selectedIndex].value);
+  };
+
+  function keyHendler(id, setVal) {
+    const inputVal = document.getElementById(id).value;
+    setVal(inputVal);
   }
-
-
   return (
     <div className="App">
-      <header className="header">
-        Конвертер валют
-      </header>
-      <div className='converter'>
-        <div className='converter__input-container'>
-          <input className='converter__input' type="text" value="1"></input>
-          <select id= 'selectBase'class="converter__selector" onChange={_=>selectorHandler('selectBase', setBaseCurrensy)}>
-          {availebleCurrensies.map((item, i)=>(
-            <option selected = {baseCurrensy == item ? true : false}  key={i}>{item}</option>
-        ))}
+      <header className="header">Конвертер валют</header>
+      <div className="converter">
+        <div className="converter__input-container">
+          <input
+            id="base"
+            className="converter__input"
+            type="text"
+            defaultValue="1"
+            maxLength="12"
+            onKeyUp={(_) => keyHendler("base", setBaseCurrensyVal)}
+          ></input>
+          <select
+            id="selectBase"
+            class="converter__selector"
+            onChange={(_) => selectorHandler("selectBase", setBaseCurrensy)}
+          >
+            {availebleCurrensies.map((item, i) => (
+              <option selected={baseCurrensy == item ? true : false} key={i}>
+                {item}
+              </option>
+            ))}
           </select>
-          <p className='converter__result'>{convertedCurrensyVal}</p>
-          <select id= 'selectConverted'class="converter__selector" onChange={_=>selectorHandler('selectConverted', setConvertedCurrensy)}>
-          {availebleCurrensies.map((item, i)=>(
-            <option selected = {convertedCurrensy == item ? true : false} key={i}>{item}</option>
-        ))}
+          <input
+            id="convert"
+            className="converter__result"
+            value={
+              baseCurrensyVal === 1
+                ? convertedCurrensyVal
+                : convertedCurrensyVal * baseCurrensyVal
+            }
+            onKeyUp={(_) => keyHendler("convert", setConvertedCurrensyVal)}
+          ></input>
+          <select
+            id="selectConverted"
+            class="converter__selector"
+            onChange={(_) =>
+              selectorHandler("selectConverted", setConvertedCurrensy)
+            }
+          >
+            {availebleCurrensies.map((item, i) => (
+              <option
+                selected={convertedCurrensy == item ? true : false}
+                key={i}
+              >
+                {item}
+              </option>
+            ))}
           </select>
         </div>
-
       </div>
     </div>
   );
