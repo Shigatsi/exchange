@@ -41,11 +41,14 @@ function App() {
           ></input>
           <select
             id="selectBase"
-            class="converter__selector"
+            className="converter__selector"
             onChange={(evt) => setBaseCurrensy(evt.target.value)}
           >
             {availebleCurrensies.map((item, i) => (
-              <option selected={baseCurrensy == item ? true : false} key={i}>
+              <option
+                defaultValue={baseCurrensy === item ? true : false}
+                key={i}
+              >
                 {item}
               </option>
             ))}
@@ -61,12 +64,12 @@ function App() {
           ></input>
           <select
             id="selectConverted"
-            class="converter__selector"
+            className="converter__selector"
             onChange={(evt) => setConvertedCurrensy(evt.target.value)}
           >
             {availebleCurrensies.map((item, i) => (
               <option
-                selected={convertedCurrensy == item ? true : false}
+                defaultValue={convertedCurrensy === item ? true : false}
                 key={i}
               >
                 {item}
