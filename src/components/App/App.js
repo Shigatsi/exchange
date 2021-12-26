@@ -7,8 +7,9 @@ import { availebleCurrensies } from "../../utils/const";
 function App() {
   const [baseCurrensy, setBaseCurrensy] = React.useState("EUR");
   const [convertedCurrensy, setConvertedCurrensy] = React.useState("RUB");
-  const [convertedCurrensyVal, setConvertedCurrensyVal] = React.useState(null);
-  const [baseCurrensyVal, setBaseCurrensyVal] = React.useState("1");
+  const [convertedCurrensyVal, setConvertedCurrensyVal] = React.useState("");
+  const [baseCurrensyVal, setBaseCurrensyVal] = React.useState("");
+  const [convertedValue, setConvertedValue] = React.useState(null);
 
   React.useEffect(() => {
     getLatest(baseCurrensy)
@@ -17,18 +18,11 @@ function App() {
       })
       .then((currensies) => {
         setConvertedCurrensyVal(currensies.data[convertedCurrensy]);
+        setConvertedValue(currensies.data[convertedCurrensy]);
+        setBaseCurrensyVal("1");
       });
   }, [baseCurrensy, convertedCurrensy]);
 
-  const selectorHandler = (id, setCurrensy) => {
-    const selectBox = document.getElementById(id);
-    setCurrensy(selectBox.options[selectBox.selectedIndex].value);
-  };
-
-  function keyHendler(id, setVal) {
-    const inputVal = document.getElementById(id).value;
-    setVal(inputVal);
-  }
   return (
     <div className="App">
       <header className="header">Конвертер валют</header>
@@ -38,14 +32,17 @@ function App() {
             id="base"
             className="converter__input"
             type="text"
-            defaultValue="1"
+            value={baseCurrensyVal}
             maxLength="12"
-            onKeyUp={(_) => keyHendler("base", setBaseCurrensyVal)}
+            onKeyUp={(evt) => {
+              setConvertedCurrensyVal(evt.target.value * convertedValue);
+            }}
+            onChange={(evt) => setBaseCurrensyVal(evt.target.value)}
           ></input>
           <select
             id="selectBase"
             class="converter__selector"
-            onChange={(_) => selectorHandler("selectBase", setBaseCurrensy)}
+            onChange={(evt) => setBaseCurrensy(evt.target.value)}
           >
             {availebleCurrensies.map((item, i) => (
               <option selected={baseCurrensy == item ? true : false} key={i}>
@@ -56,19 +53,16 @@ function App() {
           <input
             id="convert"
             className="converter__result"
-            value={
-              baseCurrensyVal === 1
-                ? convertedCurrensyVal
-                : convertedCurrensyVal * baseCurrensyVal
+            value={convertedCurrensyVal}
+            onKeyUp={(evt) =>
+              setBaseCurrensyVal(evt.target.value / convertedValue)
             }
-            onKeyUp={(_) => keyHendler("convert", setConvertedCurrensyVal)}
+            onChange={(evt) => setConvertedCurrensyVal(evt.target.value)}
           ></input>
           <select
             id="selectConverted"
             class="converter__selector"
-            onChange={(_) =>
-              selectorHandler("selectConverted", setConvertedCurrensy)
-            }
+            onChange={(evt) => setConvertedCurrensy(evt.target.value)}
           >
             {availebleCurrensies.map((item, i) => (
               <option
