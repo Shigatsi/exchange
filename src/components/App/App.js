@@ -3,7 +3,7 @@ import "./App.css";
 
 import Header from "../Header/Header";
 import Converter from "../Converter/Converter";
-
+import Error from "../Error/Error";
 import Footer from "../Footer/Footer";
 
 import { getLatest } from "../../utils/Api";
@@ -15,6 +15,7 @@ function App() {
   const [baseCurrensyVal, setBaseCurrensyVal] = React.useState("");
   const [convertedValue, setConvertedValue] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [serverErr, setServerErr] = React.useState("");
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -27,7 +28,10 @@ function App() {
         setConvertedValue(currensies.data[convertedCurrensy]);
         setBaseCurrensyVal("1");
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err);
+        setServerErr(err);
+      })
       .finally(() => setIsLoading(false));
   }, [baseCurrensy, convertedCurrensy]);
 
@@ -54,16 +58,21 @@ function App() {
   return (
     <div className="page">
       <Header />
-      <Converter
-        baseCurrensyVal={baseCurrensyVal}
-        baseCurrensy={baseCurrensy}
-        convertedValue={convertedValue}
-        convertedCurrensyVal={convertedCurrensyVal}
-        convertedCurrensy={convertedCurrensy}
-        isLoading={isLoading}
-        selectedCurrensyHandler={selectedCurrensyHandler}
-        inputHandler={inputHandler}
-      />
+      {serverErr ? (
+        <Error serverErr={serverErr} />
+      ) : (
+        <Converter
+          baseCurrensyVal={baseCurrensyVal}
+          baseCurrensy={baseCurrensy}
+          convertedValue={convertedValue}
+          convertedCurrensyVal={convertedCurrensyVal}
+          convertedCurrensy={convertedCurrensy}
+          isLoading={isLoading}
+          selectedCurrensyHandler={selectedCurrensyHandler}
+          inputHandler={inputHandler}
+        />
+      )}
+
       <Footer />
     </div>
   );
