@@ -9,49 +9,49 @@ import Footer from "../Footer/Footer";
 import { getLatest } from "../../utils/Api";
 
 function App() {
-  const [baseCurrensy, setBaseCurrensy] = React.useState("EUR");
-  const [convertedCurrensy, setConvertedCurrensy] = React.useState("RUB");
-  const [convertedCurrensyVal, setConvertedCurrensyVal] = React.useState("");
-  const [baseCurrensyVal, setBaseCurrensyVal] = React.useState("");
+  const [baseCurrency, setBaseCurrency] = React.useState("EUR");
+  const [convertedCurrency, setConvertedCurrency] = React.useState("RUB");
+  const [convertedCurrencyVal, setConvertedCurrencyVal] = React.useState("");
+  const [baseCurrencyVal, setBaseCurrencyVal] = React.useState("");
   const [convertedValue, setConvertedValue] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [serverErr, setServerErr] = React.useState("");
 
   React.useEffect(() => {
     setIsLoading(true);
-    getLatest(baseCurrensy)
+    getLatest(baseCurrency)
       .then((currensies) => {
         return currensies;
       })
       .then((currensies) => {
-        setConvertedCurrensyVal(currensies.data[convertedCurrensy]);
-        setConvertedValue(currensies.data[convertedCurrensy]);
-        setBaseCurrensyVal("1");
+        setConvertedCurrencyVal(currensies.data[convertedCurrency]);
+        setConvertedValue(currensies.data[convertedCurrency]);
+        setBaseCurrencyVal("1");
       })
       .catch((err) => {
         console.log(err);
         setServerErr(err);
       })
       .finally(() => setIsLoading(false));
-  }, [baseCurrensy, convertedCurrensy]);
+  }, [baseCurrency, convertedCurrency]);
 
-  const selectedCurrensyHandler = (evt, id) => {
+  const selectedCurrencyHandler = (evt, id) => {
     if (id === "base") {
-      setBaseCurrensy(evt.target.value);
+      setBaseCurrency(evt.target.value);
     } else if (id === "converted") {
-      setConvertedCurrensy(evt.target.value);
+      setConvertedCurrency(evt.target.value);
     }
   };
 
   const inputHandler = (evt, id) => {
     if (id === "base") {
-      setConvertedCurrensyVal(evt.target.value * convertedValue);
+      setConvertedCurrencyVal(evt.target.value * convertedValue);
     } else if (id === "converted") {
-      setBaseCurrensyVal(evt.target.value / convertedValue);
+      setBaseCurrencyVal(evt.target.value / convertedValue);
     } else if (id === "baseVal") {
-      setBaseCurrensyVal(evt.target.value);
+      setBaseCurrencyVal(evt.target.value.replace(/^-?\\d*(\\.\\d+)?$/, ""));
     } else if (id === "convertedVal") {
-      setConvertedCurrensyVal(evt.target.value);
+      setConvertedCurrencyVal(evt.target.value);
     }
   };
 
@@ -62,13 +62,13 @@ function App() {
         <Error serverErr={serverErr} />
       ) : (
         <Converter
-          baseCurrensyVal={baseCurrensyVal}
-          baseCurrensy={baseCurrensy}
+          baseCurrencyVal={baseCurrencyVal}
+          baseCurrency={baseCurrency}
           convertedValue={convertedValue}
-          convertedCurrensyVal={convertedCurrensyVal}
-          convertedCurrensy={convertedCurrensy}
+          convertedCurrencyVal={convertedCurrencyVal}
+          convertedCurrency={convertedCurrency}
           isLoading={isLoading}
-          selectedCurrensyHandler={selectedCurrensyHandler}
+          selectedCurrencyHandler={selectedCurrencyHandler}
           inputHandler={inputHandler}
         />
       )}
