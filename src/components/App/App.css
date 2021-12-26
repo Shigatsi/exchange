@@ -12,6 +12,10 @@
   margin: 0 auto;
   font-family: "Inter", Arial, sans-serif;
   position: relative;
+
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 4fr 1fr;
 }
 
 body {

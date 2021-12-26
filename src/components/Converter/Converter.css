@@ -1,0 +1,17 @@
+.converter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.converter__container {
+  display: flex;
+  gap: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .converter__container {
+    display: grid;
+  }
+}
