@@ -1,8 +1,12 @@
 import React from "react";
 import "./App.css";
 
+import Header from "../Header/Header";
+import Converter from "../Converter/Converter";
+
+import Footer from "../Footer/Footer";
+
 import { getLatest } from "../../utils/Api";
-import { availebleCurrensies } from "../../utils/const";
 
 function App() {
   const [baseCurrensy, setBaseCurrensy] = React.useState("EUR");
@@ -10,8 +14,10 @@ function App() {
   const [convertedCurrensyVal, setConvertedCurrensyVal] = React.useState("");
   const [baseCurrensyVal, setBaseCurrensyVal] = React.useState("");
   const [convertedValue, setConvertedValue] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
+    setIsLoading(true);
     getLatest(baseCurrensy)
       .then((currensies) => {
         return currensies;
@@ -20,64 +26,54 @@ function App() {
         setConvertedCurrensyVal(currensies.data[convertedCurrensy]);
         setConvertedValue(currensies.data[convertedCurrensy]);
         setBaseCurrensyVal("1");
-      });
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
   }, [baseCurrensy, convertedCurrensy]);
 
+  console.log(isLoading);
+
+  const baseInputHandler = (evt) => {
+    setConvertedCurrensyVal(evt.target.value * convertedValue);
+  };
+
+  const convertedInputHandler = (evt) => {
+    setBaseCurrensyVal(evt.target.value / convertedValue);
+  };
+
+  const baseCurrensyHandler = (evt) => {
+    setBaseCurrensy(evt.target.value);
+  };
+
+  const convertedCurrensyHandler = (evt) => {
+    setConvertedCurrensy(evt.target.value);
+  };
+
+  const baseValHandler = (evt) => {
+    setBaseCurrensyVal(evt.target.value);
+  };
+  const convertedValHandler = (evt) => {
+    setConvertedCurrensyVal(evt.target.value);
+  };
+
   return (
-    <div className="App">
-      <header className="header">Конвертер валют</header>
-      <div className="converter">
-        <div className="converter__input-container">
-          <input
-            id="base"
-            className="converter__input"
-            type="text"
-            value={baseCurrensyVal}
-            maxLength="12"
-            onKeyUp={(evt) => {
-              setConvertedCurrensyVal(evt.target.value * convertedValue);
-            }}
-            onChange={(evt) => setBaseCurrensyVal(evt.target.value)}
-          ></input>
-          <select
-            id="selectBase"
-            className="converter__selector"
-            onChange={(evt) => setBaseCurrensy(evt.target.value)}
-          >
-            {availebleCurrensies.map((item, i) => (
-              <option
-                defaultValue={baseCurrensy === item ? true : false}
-                key={i}
-              >
-                {item}
-              </option>
-            ))}
-          </select>
-          <input
-            id="convert"
-            className="converter__result"
-            value={convertedCurrensyVal}
-            onKeyUp={(evt) =>
-              setBaseCurrensyVal(evt.target.value / convertedValue)
-            }
-            onChange={(evt) => setConvertedCurrensyVal(evt.target.value)}
-          ></input>
-          <select
-            id="selectConverted"
-            className="converter__selector"
-            onChange={(evt) => setConvertedCurrensy(evt.target.value)}
-          >
-            {availebleCurrensies.map((item, i) => (
-              <option
-                defaultValue={convertedCurrensy === item ? true : false}
-                key={i}
-              >
-                {item}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+    <div className="page">
+      <Header />
+      <Converter
+        baseCurrensyVal={baseCurrensyVal}
+        baseCurrensy={baseCurrensy}
+        convertedValue={convertedValue}
+        convertedCurrensyVal={convertedCurrensyVal}
+        convertedCurrensy={convertedCurrensy}
+        isLoading={isLoading}
+        baseInputHandler={baseInputHandler}
+        convertedInputHandler={convertedInputHandler}
+        convertedCurrensyHandler={convertedCurrensyHandler}
+        baseCurrensyHandler={baseCurrensyHandler}
+        baseValHandler={baseValHandler}
+        convertedValHandler={convertedValHandler}
+      />
+      <Footer />
     </div>
   );
 }
