@@ -9,12 +9,8 @@ function Converter({
   convertedCurrensyVal,
   convertedCurrensy,
   isLoading,
-  baseInputHandler,
-  convertedInputHandler,
-  convertedCurrensyHandler,
-  baseCurrensyHandler,
-  baseValHandler,
-  convertedValHandler,
+  selectedCurrensyHandler,
+  inputHandler,
 }) {
   return (
     <div className="converter">
@@ -28,13 +24,13 @@ function Converter({
             type="text"
             value={baseCurrensyVal}
             maxLength="12"
-            onKeyUp={(evt) => baseInputHandler(evt)}
-            onChange={(evt) => baseValHandler(evt)}
+            onKeyUp={(evt) => inputHandler(evt, "base")}
+            onChange={(evt) => inputHandler(evt, "baseVal")}
           ></input>
           <select
             id="selectBase"
             className="converter__selector"
-            onChange={(evt) => baseCurrensyHandler(evt)}
+            onChange={(evt) => selectedCurrensyHandler(evt, "base")}
           >
             {availebleCurrensies.map((item, i) => (
               <option selected={baseCurrensy === item ? true : false} key={i}>
@@ -46,13 +42,13 @@ function Converter({
             id="convert"
             className="converter__result"
             value={convertedCurrensyVal}
-            onKeyUp={(evt) => convertedInputHandler(evt)}
-            onChange={(evt) => convertedValHandler(evt)}
+            onKeyUp={(evt) => inputHandler(evt, "converted")}
+            onChange={(evt) => inputHandler(evt, "convertedVal")}
           ></input>
           <select
             id="selectConverted"
             className="converter__selector"
-            onChange={(evt) => convertedCurrensyHandler(evt)}
+            onChange={(evt) => selectedCurrensyHandler(evt, "converted")}
           >
             {availebleCurrensies.map((item, i) => (
               <option

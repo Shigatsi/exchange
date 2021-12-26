@@ -31,29 +31,24 @@ function App() {
       .finally(() => setIsLoading(false));
   }, [baseCurrensy, convertedCurrensy]);
 
-  console.log(isLoading);
-
-  const baseInputHandler = (evt) => {
-    setConvertedCurrensyVal(evt.target.value * convertedValue);
+  const selectedCurrensyHandler = (evt, id) => {
+    if (id === "base") {
+      setBaseCurrensy(evt.target.value);
+    } else if (id === "converted") {
+      setConvertedCurrensy(evt.target.value);
+    }
   };
 
-  const convertedInputHandler = (evt) => {
-    setBaseCurrensyVal(evt.target.value / convertedValue);
-  };
-
-  const baseCurrensyHandler = (evt) => {
-    setBaseCurrensy(evt.target.value);
-  };
-
-  const convertedCurrensyHandler = (evt) => {
-    setConvertedCurrensy(evt.target.value);
-  };
-
-  const baseValHandler = (evt) => {
-    setBaseCurrensyVal(evt.target.value);
-  };
-  const convertedValHandler = (evt) => {
-    setConvertedCurrensyVal(evt.target.value);
+  const inputHandler = (evt, id) => {
+    if (id === "base") {
+      setConvertedCurrensyVal(evt.target.value * convertedValue);
+    } else if (id === "converted") {
+      setBaseCurrensyVal(evt.target.value / convertedValue);
+    } else if (id === "baseVal") {
+      setBaseCurrensyVal(evt.target.value);
+    } else if (id === "convertedVal") {
+      setConvertedCurrensyVal(evt.target.value);
+    }
   };
 
   return (
@@ -66,12 +61,8 @@ function App() {
         convertedCurrensyVal={convertedCurrensyVal}
         convertedCurrensy={convertedCurrensy}
         isLoading={isLoading}
-        baseInputHandler={baseInputHandler}
-        convertedInputHandler={convertedInputHandler}
-        convertedCurrensyHandler={convertedCurrensyHandler}
-        baseCurrensyHandler={baseCurrensyHandler}
-        baseValHandler={baseValHandler}
-        convertedValHandler={convertedValHandler}
+        selectedCurrensyHandler={selectedCurrensyHandler}
+        inputHandler={inputHandler}
       />
       <Footer />
     </div>
