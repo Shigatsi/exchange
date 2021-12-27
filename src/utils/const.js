@@ -1,4 +1,5 @@
 export const BASE_URL = "https://freecurrencyapi.net/api/v2/";
+export const pattern = /[а-яА-Я ёЁ a-z A-Z!@#$%^&*)(+=._-]/;
 export const availebleCurrensies = [
   "USD",
   "JPY",

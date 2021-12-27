@@ -7,6 +7,7 @@ import Error from "../Error/Error";
 import Footer from "../Footer/Footer";
 
 import { getLatest } from "../../utils/Api";
+import { pattern } from "../../utils/const";
 
 function App() {
   const [baseCurrency, setBaseCurrency] = React.useState("EUR");
@@ -49,9 +50,9 @@ function App() {
     } else if (id === "converted") {
       setBaseCurrencyVal(evt.target.value / convertedValue);
     } else if (id === "baseVal") {
-      setBaseCurrencyVal(evt.target.value.replace(/^-?\\d*(\\.\\d+)?$/, ""));
+      setBaseCurrencyVal(evt.target.value.replace(pattern, ""));
     } else if (id === "convertedVal") {
-      setConvertedCurrencyVal(evt.target.value);
+      setConvertedCurrencyVal(evt.target.value.replace(pattern, ""));
     }
   };
 
